@@ -56,6 +56,7 @@ int main (int argc, char **argv)
   struct sockaddr_in server;
   struct hostent *hp;
   int s;
+  int gibmesize;
   char helo[100];
   char mail[100];
   char rcpt[100];
@@ -110,7 +111,9 @@ if(connect(s, (struct sockaddr *) &server, sizeof (struct sockaddr)) == -1) {
  
   sprintf (rcpt, "rcpt to:%s\r\n",name);
   send (s, rcpt, strlen (rcpt), 0);
-  recv(s,gibme, sizeof(gibme),0);
+
+  gibmesize = recv(s,gibme, sizeof(gibme),0);
+  gibme[gibmesize] = '\0';
   
   if((strstr(gibme, "Recipient") != NULL)) {
   fprintf(of,"%s",gibme); 
